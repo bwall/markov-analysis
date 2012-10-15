@@ -10,7 +10,7 @@ import operator
 
 class MarkovDB:
     def createDB(self):
-        fileOUT = open(self.name + ".db", "w")
+        fileOUT = open(os.getcwd() + "/dbs/" + self.name + ".db", "w")
         for first in range(0, 256):
             for second in range(0, 256):
                 fileOUT.write("0\n")
@@ -18,7 +18,7 @@ class MarkovDB:
     
     def __init__(self, name):
         self.name = name
-        if os.path.isfile(name + ".db") == False:
+        if os.path.isfile(os.getcwd() + "/dbs/" + name + ".db") == False:
             self.createDB()
         self.data = dict()
         for first in range(0, 256):
@@ -28,14 +28,14 @@ class MarkovDB:
         self.load()
         
     def load(self):
-        fileIN = open(self.name + ".db", "r")
+        fileIN = open(os.getcwd() + "/dbs/" + self.name + ".db", "r")
         for first in range(0, 256):
             for second in range(0, 256):
                 self.data[first][second] = int(fileIN.readline())
         fileIN.close()
                 
     def save(self):
-        fileOUT = open(self.name + ".db", "w")      
+        fileOUT = open(os.getcwd() + "/dbs/" + self.name + ".db", "w")      
         for first in range(0, 256):
             for second in range(0, 256):
                 fileOUT.write(str(self.data[first][second]) + "\n")
@@ -96,9 +96,9 @@ def GetBestMatches(line):
 			break
 
 def LoadAllKnown():
-    files = filter(os.path.isfile, os.listdir('.'))
+    files = os.listdir("dbs")
     for f in files:
-        if f[-3:] == ".db":
+        if f[-3:] == ".db" and os.path.isfile(os.getcwd() + "/dbs/" + f) == True:
             databases[f[:-3]] = MarkovDB(f[:-3])
 
 def SaveAll():
